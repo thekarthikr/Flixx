@@ -42,6 +42,49 @@ const global = {
  }
 
 
+// Display Popular Tv Shows
+
+const displayTvShows = async ()=>{
+  const {results} =await fetchAPI('tv/popular');
+  
+  results.forEach(shows =>{
+     const div = document.createElement('div');
+      div.classList.add('.card');
+      div.innerHTML =
+  
+     ` <a href="tv-details.html?id=${shows.id}">
+       ${
+         shows.poster_path 
+         ? ` <img
+         src="https://image.tmdb.org/t/p/w200${shows.poster_path}"
+         class="card-img-top"
+         alt="${shows.name}"
+       />`:  
+       `<img
+       src="../images/no-image.jpg"
+       class="card-img-top"
+       alt="${shows.name}"
+     />`
+       }
+      </a>
+      <div class="card-body">
+        <h5 class="card-title">${shows.name} </h5>
+        <p class="card-text">
+          <small class="text-muted">Air Date: ${shows.first_air_date} </small>
+        </p>
+      </div>`
+      
+   document.getElementById('popular-shows').appendChild(div)
+
+   
+  })
+}
+
+
+
+
+
+
 
 // Fetch API from TMDB API
 
@@ -90,7 +133,7 @@ const init = ()=>{
             displayPopularMovies();
              break;
         case '/shows.html':
-            console.log('Shows')
+            displayTvShows();
             break;
         case '/movie-details.html':
             console.log('Movie details')
