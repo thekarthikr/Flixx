@@ -87,7 +87,7 @@ const displayMovieDetails = async ()=>{
    
   const movie = await fetchAPI(`movie/${movieId}`);
      
-     
+      displayBackdrop('movie',movie.backdrop_path);
  
      const div = document.createElement('div');
      div.innerHTML = 
@@ -203,6 +203,26 @@ const addCommasToNumber = (number)=>{
 
 //   Display Backdrop to the Details Pages
 
+ const displayBackdrop = (type , backgroundPath)=> {
+    const backdropDiv = document.createElement('div');
+    backdropDiv.style.backgroundImage = `url(https://image.tmdb.org/t/p/original/${backgroundPath})`;
+    backdropDiv.style.backgroundSize = 'cover';
+    backdropDiv.style.backgroundRepeat = 'no-repeat';
+    backdropDiv.style.width = '100vw';
+    backdropDiv.style.height = '100vh';
+    backdropDiv.style.position = 'absolute';
+    backdropDiv.style.top = '0';
+    backdropDiv.style.left = '0';
+    backdropDiv.style.zIndex = '-1';
+    backdropDiv.style.opacity = '.1'
+    backdropDiv.style.backgroundPosition = 'center'
+
+   if(type === 'movie'){
+     document.getElementById('movie-details').appendChild(backdropDiv);
+   } else{
+    document.getElementById('show-details').appendChild(backdropDiv);
+   }
+ }
 
 // Init application
 const init = ()=>{
