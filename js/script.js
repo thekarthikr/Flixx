@@ -5,6 +5,7 @@ const global = {
       type:'',
       page:1,
       totalPages:1,
+      totalResults:0
     },
    api:{
     apiKey :"0897bbbb8b0f2b7062d9d0354a3c7973",
@@ -315,12 +316,16 @@ const displayTvShowDetails = async ()=>{
     global.search.term = urlParams.get('search-term')
    
     if(global.search.term.trim() !== '' && global.search.term.trim() !== null){
-        const {results,page,total_pages} = await fetchSearchAPIData();
+        const {results,page,total_pages,total_results} = await fetchSearchAPIData();
            
           if(results.length === 0){
             showAlert('No results found')
             return;
           }
+         
+        global.search.page = page;
+        global.search.totalPages= total_pages;
+        global.search.totalResults = total_results;
 
     displaySearchResults(results);
     document.getElementById('search-term').value = '';
@@ -369,8 +374,10 @@ const displayTvShowDetails = async ()=>{
        </p>
      </div>`
      
-     
-  
+     document.getElementById('search-results-heading').innerHTML =
+     `
+     <h2> ${results.length} of ${global.search.totalResults} results for ${global.search.term} </h2>
+     `
    document.getElementById('search-results').appendChild(div)
   
 
