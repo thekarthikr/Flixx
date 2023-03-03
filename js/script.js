@@ -344,6 +344,13 @@ const displayTvShowDetails = async ()=>{
 
 
  const displaySearchResults = (results)=>{
+  
+  // Clear Previous Results
+
+   document.getElementById('search-results').innerHTML = '';
+   document.getElementById('search-results-heading').innerHTML = '';
+   document.getElementById('pagination').innerHTML = '  '
+
 
   results.forEach(result =>{
     const div = document.createElement('div');
@@ -383,10 +390,43 @@ const displayTvShowDetails = async ()=>{
 
  })
 
-
+  displayPagination();
  }
 
+ 
+const displayPagination = ()=>{
+  const div = document.createElement('div')
+  div.classList.add('pagination');
+  div.innerHTML = 
 
+  `
+  <button class="btn btn-primary" id="prev">Prev</button>
+  <button class="btn btn-primary" id="next">Next</button>
+  <div class="page-counter">Page ${global.search.page} of ${global.search.totalPages} </div>
+  `
+
+
+  document.getElementById('pagination').appendChild(div)
+
+  if(global.search.page === 1)
+    document.getElementById('prev').disabled = true;
+    
+  if(global.search.page === global.search.totalPages)
+     document.getElementById('next').disabled = true;
+
+
+ document.getElementById('next').addEventListener('click', async ()=>{
+    global.search.page ++;
+    const {results , total_pages} = await fetchSearchAPIData();
+    displaySearchResults(results);
+ })
+
+ document.getElementById('prev').addEventListener('click', async ()=>{
+  global.search.page --;
+  const {results , total_pages} = await fetchSearchAPIData();
+  displaySearchResults(results);
+})
+}
 
 // Fetch API from TMDB API
 
@@ -413,7 +453,7 @@ const displayTvShowDetails = async ()=>{
    
      showLoader()
 
-    const response =await fetch(`${API_URL}search/${global.search.type}?api_key=${API_KEY}&language=en-US&query=${global.search.term}`);
+    const response =await fetch(`${API_URL}search/${global.search.type}?api_key=${API_KEY}&language=en-US&query=${global.search.term}&page=${global.search.page}`);
     const data = await response.json();
  
     hideLoader()
