@@ -153,7 +153,7 @@ const displayMovieDetails = async ()=>{
        <li><span class="text-secondary">Runtime:</span> ${movie.runtime} minutes </li>
        <li><span class="text-secondary">Status:</span> ${movie.release_date} </li>
      </ul>
-     <h4>Production Companies</h4>
+     <p class="text-secondary">Production Companies</p>
      <div class="list-group">
      ${
        movie.production_companies.map(company => 
@@ -227,7 +227,7 @@ const displayTvShowDetails = async ()=>{
         </li>
         <li><span class="text-secondary">Status:</span> ${tvShow.status} </li>
       </ul>
-      <h4>Production Companies</h4>
+      <p class="text-secondary">Production Companies</p>
       <div class="list-group">
       ${
         tvShow.production_companies.map(company => 
@@ -243,6 +243,48 @@ const displayTvShowDetails = async ()=>{
 }
 
 
+//  Display Cast 
+
+const displayCast = async (type, id)=>{
+  const {cast} = await fetchAPI(`${type}/${id}/credits`);
+  console.log(cast)
+   
+  cast.forEach(person=>{
+     const div = document.createElement('div');
+     div.classList.add('card');
+      div.innerHTML = 
+      ` 
+      <a href="cast-details.html?id=${person.id}">
+      ${
+        person.profile_path 
+        ? ` <img
+        src="https://image.tmdb.org/t/p/w500/${person.profile_path}"
+        class="card-img-top"
+        alt="${person.name}"
+      />`:  
+      `<img
+      src="../images/no-image.jpg"
+      class="card-img-top"
+      alt="${person.name}"
+    />`
+      }
+     </a>
+     <div class="card-body">
+       <h5 class="card-title">${person.name} </h5>
+       <p class="card-text">
+         <small class="text-muted">Character: ${person.character} </small>
+       </p>
+     </div>`
+     
+   document.getElementById('cast-details').appendChild(div)
+  })
+    
+}
+
+
+
+
+// Display Cast Details 
 
  const displayCastDetails = async ()=>{
   const personId = window.location.search.split('=')[1];
@@ -277,13 +319,9 @@ const displayTvShowDetails = async ()=>{
        <p> Also Known Us: ${cast.also_known_as? cast.also_known_as: 'Unavailable'} </p>
        <p class="text-muted">Date Of Birth: ${cast.birthday} </p>
       <p> Biography: <br> ${cast.biography ? cast.biography : 'Unavailable'} <p>
-       <p> Profession: ${cast.known_for_department} </p>
+       <p> Known For Department: ${cast.known_for_department} </p>
        <p> Popularity: ${(cast.popularity).toFixed(1)} 
-        <p> Place Of Birth: ${cast.place_of_birth? cast.place_of_birth :'Unavailable'} </p>
-
-     
-    
-       
+        <p> Place Of Birth: ${cast.place_of_birth? cast.place_of_birth :'Unavailable'} </p>       
      </div>
    
    </div>
@@ -448,7 +486,8 @@ const displayTvShowDetails = async ()=>{
   displayPagination();
  }
 
- 
+//   Display Pagination for the search results
+
 const displayPagination = ()=>{
   const div = document.createElement('div')
   div.classList.add('pagination');
@@ -483,44 +522,9 @@ const displayPagination = ()=>{
 })
 }
 
-const displayCast = async (type, id)=>{
-  const {cast} = await fetchAPI(`${type}/${id}/credits`);
-  console.log(cast)
-   
-  cast.forEach(person=>{
-     const div = document.createElement('div');
-     div.classList.add('card');
-      div.innerHTML = 
-      ` 
-      <a href="cast-details.html?id=${person.id}">
-      ${
-        person.profile_path 
-        ? ` <img
-        src="https://image.tmdb.org/t/p/w500/${person.profile_path}"
-        class="card-img-top"
-        alt="${person.name}"
-      />`:  
-      `<img
-      src="../images/no-image.jpg"
-      class="card-img-top"
-      alt="${person.name}"
-    />`
-      }
-     </a>
-     <div class="card-body">
-       <h5 class="card-title">${person.name} </h5>
-       <p class="card-text">
-         <small class="text-muted">Character: ${person.character} </small>
-       </p>
-     </div>`
-     
-   document.getElementById('cast-details').appendChild(div)
-  })
-    
-}
 
 
-// Fetch API from TMDB API
+// Fetch API Data from TMDB API
 
   const fetchAPI = async (endpoint)=>{
     const API_KEY = global.api.apiKey;
