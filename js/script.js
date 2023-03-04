@@ -21,14 +21,14 @@ const global = {
      
      results.forEach(movie =>{
         const div = document.createElement('div');
-         div.classList.add('.card');
+         div.classList.add('card');
          div.innerHTML =
      
         ` <a href="movie-details.html?id=${movie.id}">
           ${
             movie.poster_path 
             ? ` <img
-            src="https://image.tmdb.org/t/p/w200${movie.poster_path}"
+            src="https://image.tmdb.org/t/p/w500/${movie.poster_path}"
             class="card-img-top"
             alt="${movie.title}"
           />`:  
@@ -45,10 +45,10 @@ const global = {
              <small class="text-muted">Release: ${movie.release_date} </small>
            </p>
          </div>`
-         
+       
       document.getElementById('popular-movies').appendChild(div)
 
-      
+  
      })
  }
 
@@ -60,14 +60,14 @@ const displayTvShows = async ()=>{
   
   results.forEach(shows =>{
      const div = document.createElement('div');
-      div.classList.add('.card');
+      div.classList.add('card');
       div.innerHTML =
   
      ` <a href="tv-details.html?id=${shows.id}">
        ${
          shows.poster_path 
          ? ` <img
-         src="https://image.tmdb.org/t/p/w200${shows.poster_path}"
+         src="https://image.tmdb.org/t/p/w500${shows.poster_path}"
          class="card-img-top"
          alt="${shows.name}"
        />`:  
@@ -96,6 +96,8 @@ const displayTvShows = async ()=>{
 const displayMovieDetails = async ()=>{
   const movieId = window.location.search.split('=')[1];
    
+  displayCast('movie',movieId);
+
   const movie = await fetchAPI(`movie/${movieId}`);
      
       displayBackdrop('movie',movie.backdrop_path);
@@ -171,7 +173,9 @@ const displayMovieDetails = async ()=>{
 
 const displayTvShowDetails = async ()=>{
   const showId = window.location.search.split('=')[1];
-
+ 
+   displayCast('tv',showId)
+   
   const tvShow = await fetchAPI(`tv/${showId}`);
      
       displayBackdrop('show',tvShow.backdrop_path);
@@ -275,9 +279,10 @@ const displayTvShowDetails = async ()=>{
    document.querySelector('.swiper-wrapper').appendChild(div);   
    initSwiper(); 
   })
-
-   
+ 
  }
+
+//  Swiper Slider
 
  function initSwiper(){
  return new Swiper('.swiper',{
@@ -342,7 +347,7 @@ const displayTvShowDetails = async ()=>{
   }
   }
 
-
+// Display Search Results
  const displaySearchResults = (results)=>{
   
   // Clear Previous Results
@@ -354,14 +359,14 @@ const displayTvShowDetails = async ()=>{
 
   results.forEach(result =>{
     const div = document.createElement('div');
-     div.classList.add('.card');
+     div.classList.add('card');
      div.innerHTML =
  
     ` <a href="${global.search.type}-details.html?id=${result.id}">
       ${
         result.poster_path 
         ? ` <img
-        src="https://image.tmdb.org/t/p/w200/${result.poster_path}"
+        src="https://image.tmdb.org/t/p/w500/${result.poster_path}"
         class="card-img-top"
         alt="${
           global.search.type === 'movie'? result.title : result.name
@@ -417,16 +422,53 @@ const displayPagination = ()=>{
 
  document.getElementById('next').addEventListener('click', async ()=>{
     global.search.page ++;
-    const {results , total_pages} = await fetchSearchAPIData();
+    const {results } = await fetchSearchAPIData();
     displaySearchResults(results);
  })
 
  document.getElementById('prev').addEventListener('click', async ()=>{
   global.search.page --;
-  const {results , total_pages} = await fetchSearchAPIData();
+  const {results } = await fetchSearchAPIData();
   displaySearchResults(results);
 })
 }
+
+const displayCast = async (type, id)=>{
+  const {cast} = await fetchAPI(`${type}/${id}/credits`);
+  console.log(cast)
+   
+  cast.forEach(person=>{
+     const div = document.createElement('div');
+     div.classList.add('card');
+      div.innerHTML = 
+      ` 
+      <a href="cast-details.html?id=${person.id}">
+      ${
+        person.profile_path 
+        ? ` <img
+        src="https://image.tmdb.org/t/p/w500/${person.profile_path}"
+        class="card-img-top"
+        alt="${person.name}"
+      />`:  
+      `<img
+      src="../images/no-image.jpg"
+      class="card-img-top"
+      alt="${person.name}"
+    />`
+      }
+     </a>
+     <div class="card-body">
+       <h5 class="card-title">${person.name} </h5>
+       <p class="card-text">
+         <small class="text-muted">Character: ${person.character} </small>
+       </p>
+     </div>`
+     
+   document.getElementById('cast-details').appendChild(div)
+  })
+    
+}
+
 
 // Fetch API from TMDB API
 
@@ -513,7 +555,7 @@ const addCommasToNumber = (number)=>{
     backdropDiv.style.backgroundSize = 'cover';
     backdropDiv.style.backgroundRepeat = 'no-repeat';
     backdropDiv.style.width = '100vw';
-    backdropDiv.style.height = '100vh';
+    backdropDiv.style.height = '135vh';
     backdropDiv.style.position = 'absolute';
     backdropDiv.style.top = '0';
     backdropDiv.style.left = '0';
@@ -540,6 +582,7 @@ const init = ()=>{
             displayTvShows();
             break;
         case '/movie-details.html':
+          
             displayMovieDetails();
             break;
         case '/tv-details.html':
