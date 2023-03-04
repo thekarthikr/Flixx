@@ -143,13 +143,23 @@ const displayMovieDetails = async ()=>{
    <div class="details-bottom">
      <h2>Movie Info</h2>
      <ul>
-       <li><span class="text-secondary">Budget:</span> $${
-        addCommasToNumber(movie.budget) 
+       <li><span class="text-secondary">Budget:</span> 
+       ${
+          movie.budget ? `$${
+            addCommasToNumber(movie.budget) 
+    
+           }` : 'Unavailable'
 
-       } </li>
-       <li><span class="text-secondary">Revenue:</span> $${
-        addCommasToNumber(movie.revenue)
-       } </li>
+       }
+       
+       </li>
+       <li><span class="text-secondary">Revenue:</span>   ${
+        movie.budget ? `$${
+          addCommasToNumber(movie.revenue) 
+  
+         }` : 'Unavailable'
+
+     } </li>
        <li><span class="text-secondary">Runtime:</span> ${movie.runtime} minutes </li>
        <li><span class="text-secondary">Status:</span> ${movie.release_date} </li>
      </ul>
@@ -270,9 +280,9 @@ const displayCast = async (type, id)=>{
       }
      </a>
      <div class="card-body">
-       <h5 class="card-title">${person.name} </h5>
+       <h5 class="card-title">${person.name ? person.name: 'Unavailable'} </h5>
        <p class="card-text">
-         <small class="text-muted">Character: ${person.character} </small>
+         <small class="text-muted">Character: ${person.character ? person.character :'Unavailable'} </small>
        </p>
      </div>`
      
@@ -319,7 +329,7 @@ const displayCast = async (type, id)=>{
        <p> Also Known Us: ${cast.also_known_as? cast.also_known_as: 'Unavailable'} </p>
        <p class="text-muted">Date Of Birth: ${cast.birthday} </p>
       <p> Biography: <br> ${cast.biography ? cast.biography : 'Unavailable'} <p>
-       <p> Known For Department: ${cast.known_for_department} </p>
+     
        <p> Popularity: ${(cast.popularity).toFixed(1)} 
         <p> Place Of Birth: ${cast.place_of_birth? cast.place_of_birth :'Unavailable'} </p>       
      </div>
@@ -358,7 +368,7 @@ const credits = async ()=>{
      }
     </a>
     <div class="card-body">
-      <h5 class="card-title">${person.title? person.title : 'Unavailable'} </h5>
+      <h5 class="card-title">${person.title? person.title : 'Unavailable'} (${person.media_type ==='movie'? 'Movie':'Tv Show'}) </h5>
       <p class="card-text">
         <small class="text-muted">${person.character ? person.character :'Unavailable'} </small>
       </p>
