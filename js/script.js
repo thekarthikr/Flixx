@@ -358,14 +358,16 @@ const credits = async ()=>{
      }
     </a>
     <div class="card-body">
-      <h5 class="card-title">${person.title} </h5>
+      <h5 class="card-title">${person.title? person.title : 'Unavailable'} </h5>
       <p class="card-text">
-        <small class="text-muted">${person.character ? person.character :''} </small>
+        <small class="text-muted">${person.character ? person.character :'Unavailable'} </small>
       </p>
     </div>`
    
     document.getElementById('credits').appendChild(div)
    })
+
+
 }
 
 
