@@ -243,6 +243,56 @@ const displayTvShowDetails = async ()=>{
 }
 
 
+
+ const displayCastDetails = async ()=>{
+  const personId = window.location.search.split('=')[1];
+ 
+
+  
+ const cast = await fetchAPI(`person/${personId}`);
+ 
+     displayBackdrop('cast',cast.profile_path);
+
+     const div = document.createElement('div');
+     div.innerHTML = 
+     `
+     <div class="details-top">
+     <div>
+     ${
+      cast.profile_path
+       ? ` <img
+       src="https://image.tmdb.org/t/p/w500${cast.profile_path}"
+       class="card-img-top"
+       alt="${cast.name}"
+     />`:  
+     `<img
+     src="../images/no-image.jpg"
+     class="card-img-top"
+     alt="${cast.name}"
+   />`
+     }
+     </div>
+     <div>
+       <h2> ${cast.name} </h2>
+       <p> Also Known Us: ${cast.also_known_as? cast.also_known_as: 'Unavailable'} </p>
+       <p class="text-muted">Date Of Birth: ${cast.birthday} </p>
+      <p> Biography: <br> ${cast.biography ? cast.biography : 'Unavailable'} <p>
+       <p> Profession: ${cast.known_for_department} </p>
+       <p> Popularity: ${(cast.popularity).toFixed(1)} 
+        <p> Place Of Birth: ${cast.place_of_birth? cast.place_of_birth :'Unavailable'} </p>
+
+     
+    
+       
+     </div>
+   
+   </div>
+     `
+
+  document.getElementById('cast-details').appendChild(div)
+ }
+
+
 // Display Now Playing Slider
 
  const displaySlider = async ()=>{
@@ -563,11 +613,18 @@ const addCommasToNumber = (number)=>{
     backdropDiv.style.opacity = '.1'
     backdropDiv.style.backgroundPosition = 'center'
 
-   if(type === 'movie'){
-     document.getElementById('movie-details').appendChild(backdropDiv);
-   } else{
-    document.getElementById('show-details').appendChild(backdropDiv);
-   }
+      switch(type){
+        case 'movie':
+          document.getElementById('movie-details').appendChild(backdropDiv);
+          break;
+        case 'show':
+          document.getElementById('show-details').appendChild(backdropDiv);
+            break;
+        case 'cast':
+           document.getElementById('cast-details').appendChild(backdropDiv)
+      }
+
+
  }
 
 // Init application
@@ -591,6 +648,8 @@ const init = ()=>{
         case '/search.html':
               search();
               break;
+        case '/cast-details.html':
+              displayCastDetails();
     }
 
     activeLinks()
