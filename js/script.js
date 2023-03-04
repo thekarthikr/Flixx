@@ -331,6 +331,44 @@ const displayCast = async (type, id)=>{
  }
 
 
+//  Movie / Tv Credits
+
+const credits = async ()=>{
+  const personId = window.location.search.split('=')[1];
+   const {cast} = await fetchAPI(`person/${personId}/combined_credits`)
+  
+   cast.forEach( person =>{
+     const div = document.createElement('div');
+     div.classList.add('card');
+     div.innerHTML = 
+      
+     ` <a href="${person.media_type}-details.html?id=${person.id}">
+     ${
+       person .poster_path 
+       ? ` <img
+       src="https://image.tmdb.org/t/p/w500/${person.poster_path}"
+       class="card-img-top"
+       alt="${person.title}"
+     />`:  
+     `<img
+     src="../images/no-image.jpg"
+     class="card-img-top"
+     alt="${person.title}"
+   />`
+     }
+    </a>
+    <div class="card-body">
+      <h5 class="card-title">${person.title} </h5>
+      <p class="card-text">
+        <small class="text-muted">${person.character ? person.character :''} </small>
+      </p>
+    </div>`
+   
+    document.getElementById('credits').appendChild(div)
+   })
+}
+
+
 // Display Now Playing Slider
 
  const displaySlider = async ()=>{
@@ -654,6 +692,7 @@ const init = ()=>{
               break;
         case '/cast-details.html':
               displayCastDetails();
+              credits();
     }
 
     activeLinks()
