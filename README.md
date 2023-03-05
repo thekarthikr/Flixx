@@ -4,7 +4,7 @@ Flixx is a movie website that allows users to browse popular movies and TV shows
 
 ## Demo
 
-A live demo of the website is available at: https://flixx-movie-website.netlify.app/
+A live demo of the website is available at: https://flixxmovieapp.netlify.app/
 
 ## Features
 
@@ -18,7 +18,7 @@ A live demo of the website is available at: https://flixx-movie-website.netlify.
 - HTML
 - CSS
 - JavaScript
-- themoviedb.org API (https://www.themoviedb.org/documentation/api)
+- themoviedb.org API (developers.themoviedb.org/3)
 
 ## API Integration
 
