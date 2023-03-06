@@ -40,4 +40,4 @@ We processed the data returned by the API using JavaScript and displayed it on t
 
 ## Credits
 
-We used the themoviedb.org API for data integration and designed by [bradtraversy](traversymedia.com)
+We used the themoviedb.org API for data integration and designed by traversymedia.com
